@@ -1,15 +1,23 @@
+//ログイン画面&サインアップ画面
+
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { fireAuth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 
 import './App.css';
 
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+
+
+import Homepage from './Homepage';
+
 
 const App = () => {
+  const navigate = useNavigate();
   // stateとしてログイン状態を管理する。ログインしていないときはnullになる。
   const [loginUser, setLoginUser] = useState(fireAuth.currentUser);
   
@@ -17,14 +25,32 @@ const App = () => {
   onAuthStateChanged(fireAuth, user => {
     setLoginUser(user);
   });
+
+  useEffect(() => {
+    if(loginUser){
+      navigate('/Homepage');
+    }
+  },[loginUser,navigate]);
+  
+
+  
   
   return (
-    <>
-      <NewLoginForm/>
-      <SignupForm/>
-      {/* ログインしていないと見られないコンテンツは、loginUserがnullの場合表示しない */}
-      {loginUser ? <Contents /> : null} 
-    </>
+    <div>
+      <Routes>
+        <Route path="/Homepage" element= {<Homepage />} />
+        {/* 他のルート設定もここに追加できます */}
+      </Routes>
+    <div>
+    {loginUser ? null :<NewLoginForm/> }
+    {loginUser ? null : <SignupForm/>}
+    {/*loginUser ? <LogoutButton/> :null*/}
+    
+    {/* ログインしていないと見られないコンテンツは、loginUserがnullの場合表示しない */}
+    {loginUser ? <Contents /> : null} 
+    </div>
+  </div>
+    
   );
 };
 
@@ -64,6 +90,23 @@ export const SignupForm: React.FC = () => {
   );
 };
 
+export const LogoutButton: React.FC = () =>{
+
+  const SignoutWithemailandpw = (): void => {
+    signOut(fireAuth).then(() => {
+      alert("ログアウトしました");
+    }).catch(err => {
+      alert(err);
+    });
+  };
+  return(
+  <button onClick={SignoutWithemailandpw}>
+        ログアウト
+  </button>
+  )   
+}
+
+
 export const NewLoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -86,13 +129,7 @@ export const NewLoginForm: React.FC = () => {
       alert(errorMessage);
     }
   };
-  const SignoutWithemailandpw = (): void => {
-    signOut(fireAuth).then(() => {
-      alert("ログアウトしました");
-    }).catch(err => {
-      alert(err);
-    });
-  };
+  
   
 
   return (
@@ -101,9 +138,6 @@ export const NewLoginForm: React.FC = () => {
       <input type="email" placeholder="メールアドレス" value={email} onChange={handleEmailChange} />
       <input type="password" placeholder="パスワード" value={password} onChange={handlePasswordChange} />
       <button onClick={handleLogin}>ログイン</button>
-      <button onClick={SignoutWithemailandpw}>
-        ログアウト
-      </button>
     </div>
   );
 };
