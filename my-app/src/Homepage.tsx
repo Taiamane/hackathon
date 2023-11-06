@@ -3,7 +3,9 @@
 import React from 'react';
 import { fireAuth } from "./firebase";
 import { useNavigate } from "react-router-dom"; // useHistoryをインポート
-import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
+
+import './Homepage.css';
 
 const Homepage: React.FC = () => {
   const navigate = useNavigate(); // useHistoryを初期化
@@ -20,11 +22,28 @@ const Homepage: React.FC = () => {
 
   return (
     <div>
-      <h2>Other Page</h2>
-      <p>This is the other page.</p>
-      <button onClick={handleLogout}>ログアウト</button>
+      
+      <button className="right" onClick={handleLogout}>ログアウト</button>
+      <Userinfo/>
+
+      <h2>Homepage</h2>
+      <p>ここ以下に「アイテム検索」のメニューを作る</p>
     </div>
   );
 };
 
 export default Homepage;
+
+const Userinfo: React.FC = () => {
+  const user = fireAuth.currentUser;
+
+  return (
+    <div>
+      {user ? (
+        <p className='right'>{`メールアドレス: ${user.email}`}</p>
+      ) : (
+        <p className='right'>ユーザーはログインしていません</p>
+      )}
+    </div>
+  );
+};

@@ -10,7 +10,7 @@ import React from 'react';
 
 import './App.css';
 
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 
 import Homepage from './Homepage';
@@ -47,7 +47,7 @@ const App = () => {
     {/*loginUser ? <LogoutButton/> :null*/}
     
     {/* ログインしていないと見られないコンテンツは、loginUserがnullの場合表示しない */}
-    {loginUser ? <Contents /> : null} 
+    {/*loginUser ? <Contents /> : null*/} 
     </div>
   </div>
     
