@@ -102,7 +102,12 @@ export const SearchForm: React.FC = () =>{
     const backendUrl = 'https://example.com/api/some-endpoint'; // このURLを実際のバックエンドエンドポイントに置き換え
 
     // GETリクエストを送信
-    fetch(backendUrl)
+    fetch(backendUrl,{
+      method:"GET",
+      headers:{
+        "Content-Type": "application/json",
+      }
+    })
       .then((response) => response.json())
       .then((data) => {
         setResponse(data.message); // レスポンスメッセージを表示

@@ -1,4 +1,5 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import store from './Store';
 
 interface FormData {
   category: string;
@@ -9,18 +10,15 @@ interface FormData {
 }
 
 const DirectInputForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    category: '',
-    curriculum: '',
-    title: '',
-    link: '',
-    description: '',
-  });
+  const [category, setCategory] = useState<string>("");
+  const [curriculum, setCurriculum] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [link, setLink] = useState<string>("");
+  const [summary,setSummary] = useState<string>("");
+  const [made_day, setMade_day] = useState<string>("");
+  const [updated_day, setUpdated_day] = useState<string>("");
+  const [formData, setFormData] = useState<FormData[]>([]);
 
-  const handleInputChange = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -32,22 +30,69 @@ const DirectInputForm: React.FC = () => {
       headers: {
         'Content-Type': 'application/json', // リクエストヘッダーを適切に設定
       },
-      body: JSON.stringify(formData), // フォームデータをJSON文字列に変換
-    });
+      body: JSON.stringify({
+        category,
+        curriculum,
+        title,
+        link,
+        summary,
+        made_day
+        
+
+    }), // フォームデータをJSON文字列に変換
+    }
+  );
 
     if (response.ok) {
-      // リクエストが成功した場合の処理
-      console.log('リクエストが成功しました');
+      fetchUsers();
+      console.log('POSTリクエストが成功しました');
     } else {
-      // エラーレスポンスの処理
-      console.error('リクエストが失敗しました');
+      console.error('POSTリクエストが失敗しました');
     }
+
+   
   } catch (error) {
     // リクエストエラーの処理
     console.error('リクエストエラー:', error);
   }
 
     
+  };
+  const fetchUsers = async()=>{
+    try{
+      const getResponse = await fetch("",{
+        method: "GET",
+        headers:{
+          "Content-Type":"application/json",
+        },
+      });
+
+      if (getResponse.status === 200) {
+        // GETリクエストの結果を処理
+        const formdata = await getResponse.json();
+        setFormData(formdata);
+        // formDataを適切に処理するコードをここに追加
+      } else {
+        // GETリクエストが失敗した場合の処理
+        console.error("GETリクエストが失敗しました");
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  },[]);
+
+  const handlechangecurriculum = (e:any) => {
+    setCurriculum(e.label);
+    const time = (store.getState().year + '年' + store.getState().month + '月' + store.getState().day + '日' + store.getState().hour + ':' + store.getState().minute);
+    setMade_day(time)
+  };
+
+  const handlechangecategory = (e:any) => {
+    setCategory(e.label);
   };
 
   return (
@@ -56,8 +101,8 @@ const DirectInputForm: React.FC = () => {
         <label>カテゴリ:</label>
         <select
           name="category"
-          value={formData.category}
-          onChange={handleInputChange}
+          value={category}
+          onChange={handlechangecategory}
         >
           <option value="">選択してください</option>
           <option value="技術ブログ">技術ブログ</option>
@@ -69,8 +114,8 @@ const DirectInputForm: React.FC = () => {
         <label>カリキュラム:</label>
         <select
           name="curriculum"
-          value={formData.curriculum}
-          onChange={handleInputChange}
+          value={curriculum}
+          onChange={handlechangecurriculum}
         >
           <option value="">選択してください</option>
           <option value="OSコマンドとシェル">OSコマンドとシェル</option>
@@ -84,8 +129,8 @@ const DirectInputForm: React.FC = () => {
         <input
           type="text"
           name="title"
-          value={formData.title}
-          onChange={handleInputChange}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </div>
       <div>
@@ -93,16 +138,16 @@ const DirectInputForm: React.FC = () => {
         <input
           type="text"
           name="link"
-          value={formData.link}
-          onChange={handleInputChange}
+          value={link}
+          onChange={(e)=> setLink(e.target.value)}
         />
       </div>
       <div>
         <label>概要説明:</label>
         <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleInputChange}
+          name="summeary"
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
         />
       </div>
       <button type="submit">送信</button>
@@ -111,6 +156,3 @@ const DirectInputForm: React.FC = () => {
 };
 
 export default DirectInputForm;
-
-
-//リクエスト内容は後で入力
