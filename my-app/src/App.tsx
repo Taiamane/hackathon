@@ -11,8 +11,6 @@ import React from 'react';
 import './App.css';
 
 import { Routes, Route, useNavigate } from "react-router-dom";
-
-
 import Homepage from './Homepage';
 
 
@@ -55,7 +53,6 @@ const App = () => {
 };
 
 export default App;
-
 
 export const SignupForm: React.FC = () => {
   const [email, setEmail] = useState('');

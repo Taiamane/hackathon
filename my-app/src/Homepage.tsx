@@ -1,11 +1,13 @@
 //ログイン後のトップ画面
 
-import React from 'react';
+import React,{ useState } from 'react';
 import { fireAuth } from "./firebase";
 import { useNavigate } from "react-router-dom"; // useHistoryをインポート
 import { signOut } from "firebase/auth";
 
 import './Homepage.css';
+
+import DirectInputForm from './Addition';
 
 const Homepage: React.FC = () => {
   const navigate = useNavigate(); // useHistoryを初期化
@@ -27,7 +29,8 @@ const Homepage: React.FC = () => {
       <Userinfo/>
 
       <h2>Homepage</h2>
-      <p>ここ以下に「アイテム検索」のメニューを作る</p>
+      <SearchForm/>
+      
     </div>
   );
 };
@@ -47,3 +50,107 @@ const Userinfo: React.FC = () => {
     </div>
   );
 };
+
+export const SearchForm: React.FC = () =>{
+
+  const Addition: React.FC = () => {
+    // フォームの表示状態を管理するための状態
+    const [isFormOpen, setIsFormOpen] = useState(false);
+  
+    // ボタンをクリックしてフォームを開く関数
+    const openForm = () => {
+      setIsFormOpen(true);
+    };
+  
+    // フォームを閉じる関数
+    const closeForm = () => {
+      setIsFormOpen(false);
+    };
+  
+    return (
+      <div>
+        <button onClick={openForm}>コンテンツ追加</button>
+        {isFormOpen && (
+          <div>
+            {/* ここに追加用のフォームのコンポーネントを配置 */}
+            <form>
+              {/* フォームの内容をここに配置 */}
+              <DirectInputForm/>
+              <button onClick={closeForm}>閉じる</button>
+            </form>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedGenre(event.target.value);
+  };
+
+  const [curriculum, setCurriculum] = useState('');
+  const handleItemChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurriculum(event.target.value);
+  };
+
+  const [response,setResponse] = useState('');
+
+  const sendRequest = () => {
+    // 適当なバックエンドエンドポイントのURLを設定
+    const backendUrl = 'https://example.com/api/some-endpoint'; // このURLを実際のバックエンドエンドポイントに置き換えてください
+
+    // GETリクエストを送信
+    fetch(backendUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setResponse(data.message); // レスポンスメッセージを表示
+      })
+      .catch((error) => {
+        console.error('リクエストエラー:', error);
+        setResponse('リクエストエラーが発生しました。');
+      });
+  };
+
+  return(
+    <div>
+      <p>カテゴリ選択</p>
+      <form name="form1">
+        <select name="genres" id="" value={selectedGenre} onChange={handleGenreChange}>
+          <option value=""></option>
+          <option value="blogs">技術ブログ</option>
+          <option value="books">技術書</option>
+          <option value="movies">技術系動画</option>
+        </select>
+      </form>
+      {/* {selectedGenre && (<p>選択されたジャンルは: {selectedGenre} です。</p>)} */}
+      <p>カリキュラム選択</p>
+      <form name="form1">
+        <select name="items" id="" value={curriculum} onChange={handleItemChange}>
+          <option value=""></option>
+          <option value="item1">OSコマンドとシェル</option>
+          <option value="item2">Git</option>
+          <option value="item3">GitHub</option>
+          <option value="item4">HTML&CSS</option>
+          <option value="item5">Javascript</option>
+          <option value="item6">React</option>
+          <option value="item7">Typescript</option>
+          <option value="item8">SQL</option>
+          <option value="item9">Docker</option>
+          <option value="item10">Go</option>
+          <option value="item11">HTTPServer</option>
+          <option value="item12">RDBMSへの接続</option>
+          <option value="item13">UnitTest</option>
+          <option value="item14">フロントとバックの接続</option>
+          <option value="item15">CI</option>
+          <option value="item16">CD</option>
+          <option value="item17">認証</option>
+        </select>
+        </form>
+      <button onClick={sendRequest}>検索</button>
+      <Addition/>
+    </div>
+  );
+};
+
+
