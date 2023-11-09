@@ -1,5 +1,4 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import store from './Store';
 
 interface FormData {
   category: string;
@@ -15,13 +14,15 @@ const DirectInputForm: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [link, setLink] = useState<string>("");
   const [summary,setSummary] = useState<string>("");
-  const [made_day, setMade_day] = useState<string>("");
+  const [made_day, setMade_day] = useState<Date>();
   const [updated_day, setUpdated_day] = useState<string>("");
   const [formData, setFormData] = useState<FormData[]>([]);
 
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    setMade_day(new Date)
     // フォームの内容を使用して必要なアクションを実行
     // バックエンドにリクエストを送信
   try {
@@ -87,8 +88,6 @@ const DirectInputForm: React.FC = () => {
 
   const handlechangecurriculum = (e:any) => {
     setCurriculum(e.label);
-    const time = (store.getState().year + '年' + store.getState().month + '月' + store.getState().day + '日' + store.getState().hour + ':' + store.getState().minute);
-    setMade_day(time)
   };
 
   const handlechangecategory = (e:any) => {

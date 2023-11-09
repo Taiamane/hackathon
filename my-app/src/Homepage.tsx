@@ -88,20 +88,20 @@ export const SearchForm: React.FC = () =>{
     setSelectedGenre(event.target.value);
   };
 
-  const [curriculum, setCurriculum] = useState('');
+  const [selectedcurriculum, setselectedCurriculum] = useState('');
   const handleItemChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurriculum(event.target.value);
+    setselectedCurriculum(event.target.value);
   };
 
   const [response,setResponse] = useState('');
 
   const sendResearch = () => {
     //以下、検索をかけた時の処理
-    const selectedGenreValue = selectedGenre;
-    const curriculumValue = curriculum;
+    const category = selectedGenre;
+    const curriculum = selectedcurriculum;
     const backendUrl = 'https://example.com/api/some-endpoint'; // このURLを実際のバックエンドエンドポイントに置き換え
 
-    // GETリクエストを送信
+    // GETリクエストを送信. ここの内容は修正が入りそう
     fetch(backendUrl,{
       method:"GET",
       headers:{
@@ -131,7 +131,7 @@ export const SearchForm: React.FC = () =>{
       </form>
       <p>カリキュラム選択</p>
       <form name="form2">
-        <select name="items" id="" value={curriculum} onChange={handleItemChange}>
+        <select name="items" id="" value={selectedcurriculum} onChange={handleItemChange}>
           <option value=""></option>
           <option value="item1">OSコマンドとシェル</option>
           <option value="item2">Git</option>
