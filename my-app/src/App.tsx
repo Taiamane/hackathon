@@ -43,9 +43,6 @@ const App = () => {
     {loginUser ? null :<NewLoginForm/> }
     {loginUser ? null : <SignupForm/>}
     {/*loginUser ? <LogoutButton/> :null*/}
-    
-    {/* ログインしていないと見られないコンテンツは、loginUserがnullの場合表示しない */}
-    {/*loginUser ? <Contents /> : null*/} 
     </div>
   </div>
     
@@ -122,70 +119,17 @@ export const NewLoginForm: React.FC = () => {
       const user = userCredential.user;
       alert('ログインユーザー: ' + user.email);
     } catch (error) {
-      const errorMessage = "エラーが発生しました"
+      const errorMessage = "ログインできません"
       alert(errorMessage);
     }
   };
   
-  
-
   return (
     <div>
       <h2>ログイン</h2>
       <input type="email" placeholder="メールアドレス" value={email} onChange={handleEmailChange} />
       <input type="password" placeholder="パスワード" value={password} onChange={handlePasswordChange} />
       <button onClick={handleLogin}>ログイン</button>
-    </div>
-  );
-};
-
-export const LoginForm: React.FC = () => {
-  /**
-   * googleでログインする
-   */
-  const signInWithGoogle = (): void => {
-    // Google認証プロバイダを利用する
-    const provider = new GoogleAuthProvider();
-
-    // ログイン用のポップアップを表示
-    signInWithPopup(fireAuth, provider)
-      .then(res => {
-        const user = res.user;
-        alert("ログインユーザー: " + user.displayName);
-      })
-      .catch(err => {
-        const errorMessage = err.message;
-        alert(errorMessage);
-      });
-  };
-
-  /**
-   * ログアウトする
-   */
-  const signOutWithGoogle = (): void => {
-    signOut(fireAuth).then(() => {
-      alert("ログアウトしました");
-    }).catch(err => {
-      alert(err);
-    });
-  };
-
-  return (
-    <div>
-      <button onClick={signInWithGoogle}>
-        Googleでログイン
-      </button>
-      <button onClick={signOutWithGoogle}>
-        ログアウト
-      </button>
-    </div>
-  );/*自習用にGoogleの方も残します */
-};
-
-const Contents: React.FC = () => {
-  return (
-    <div>
-      <p>正常にログインできています</p>
     </div>
   );
 };

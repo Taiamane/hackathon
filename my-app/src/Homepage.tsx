@@ -74,7 +74,6 @@ export const SearchForm: React.FC = () =>{
           <div>
             {/* ここに追加用のフォームのコンポーネントを配置 */}
             <form>
-              {/* フォームの内容をここに配置 */}
               <DirectInputForm/>
               <button onClick={closeForm}>閉じる</button>
             </form>
@@ -96,9 +95,11 @@ export const SearchForm: React.FC = () =>{
 
   const [response,setResponse] = useState('');
 
-  const sendRequest = () => {
-    // 適当なバックエンドエンドポイントのURLを設定
-    const backendUrl = 'https://example.com/api/some-endpoint'; // このURLを実際のバックエンドエンドポイントに置き換えてください
+  const sendResearch = () => {
+    //以下、検索をかけた時の処理
+    const selectedGenreValue = selectedGenre;
+    const curriculumValue = curriculum;
+    const backendUrl = 'https://example.com/api/some-endpoint'; // このURLを実際のバックエンドエンドポイントに置き換え
 
     // GETリクエストを送信
     fetch(backendUrl)
@@ -123,9 +124,8 @@ export const SearchForm: React.FC = () =>{
           <option value="movies">技術系動画</option>
         </select>
       </form>
-      {/* {selectedGenre && (<p>選択されたジャンルは: {selectedGenre} です。</p>)} */}
       <p>カリキュラム選択</p>
-      <form name="form1">
+      <form name="form2">
         <select name="items" id="" value={curriculum} onChange={handleItemChange}>
           <option value=""></option>
           <option value="item1">OSコマンドとシェル</option>
@@ -147,7 +147,7 @@ export const SearchForm: React.FC = () =>{
           <option value="item17">認証</option>
         </select>
         </form>
-      <button onClick={sendRequest}>検索</button>
+      <button onClick={sendResearch}>検索</button>
       <Addition/>
     </div>
   );
