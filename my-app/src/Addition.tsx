@@ -26,7 +26,7 @@ const DirectInputForm: React.FC = () => {
     // フォームの内容を使用して必要なアクションを実行
     // バックエンドにリクエストを送信
   try {
-    const response = await fetch('https://example.com/api/endpoint', {
+    const response = await fetch('http://localhost:8080', {
       method: 'POST', // POSTリクエストを送信（HTTPメソッドを適切に設定）
       headers: {
         'Content-Type': 'application/json', // リクエストヘッダーを適切に設定

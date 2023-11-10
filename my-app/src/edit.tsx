@@ -24,7 +24,7 @@ const EditPage: React.FC = () => {
     const fetchData = async () => {
       try {
         // ダミーデータを取得するためのAPIエンドポイントを適切なものに置き換える
-        const response = await fetch(`https://example.com/api/items?id=${id}`);
+        const response = await fetch(`http://localhost:8080/user?id=${id}`);
         
         if (!response.ok) {
           throw new Error('データの取得に失敗しました');
@@ -44,7 +44,7 @@ const EditPage: React.FC = () => {
   const handleEdit = async () => {
     // 編集処理を実行するためのAPIエンドポイントを適切なものに置き換える
     try {
-      const response = await fetch(`https://example.com/api/items/${id}/edit`, {
+      const response = await fetch(`http://localhost:8080/user/${id}/edit`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -118,12 +118,8 @@ export const SearchForm: React.FC = () =>{
     //以下、検索をかけた時の処理
     const category = selectedGenre;
     const curriculum = selectedcurriculum;
-    const backendUrl = 'https://example.com/api/some-endpoint'; // このURLを実際のバックエンドエンドポイントに置き換え
+    const backendUrl = 'http://localhost:8080/user'; // このURLを実際のバックエンドエンドポイントに置き換え
     
-
-    // GETリクエストを送信. ここの内容は修正が入りそう
-    //内容を手に入れた後、それを表形式で表示する。詳細に移動するボタンと、移動した先で消去と編集も実装する
-    //あとソート機能もね
     fetch(backendUrl,{
       method:"GET",
       headers:{
@@ -159,23 +155,23 @@ export const SearchForm: React.FC = () =>{
       <form name="form2">
         <select name="items" id="" value={selectedcurriculum} onChange={handleItemChange}>
           <option value=""></option>
-          <option value="item1">OSコマンドとシェル</option>
-          <option value="item2">Git</option>
-          <option value="item3">GitHub</option>
-          <option value="item4">HTML&CSS</option>
-          <option value="item5">Javascript</option>
-          <option value="item6">React</option>
-          <option value="item7">Typescript</option>
-          <option value="item8">SQL</option>
-          <option value="item9">Docker</option>
-          <option value="item10">Go</option>
-          <option value="item11">HTTPServer</option>
-          <option value="item12">RDBMSへの接続</option>
-          <option value="item13">UnitTest</option>
-          <option value="item14">フロントとバックの接続</option>
-          <option value="item15">CI</option>
-          <option value="item16">CD</option>
-          <option value="item17">認証</option>
+          <option value="OSコマンドとシェル">OSコマンドとシェル</option>
+          <option value="Git">Git</option>
+          <option value="GitHub">GitHub</option>
+          <option value="HTML&CSS">HTML&CSS</option>
+          <option value="Javascript">Javascript</option>
+          <option value="React">React</option>
+          <option value="Typescript">Typescript</option>
+          <option value="SQL">SQL</option>
+          <option value="docker">Docker</option>
+          <option value="Go">Go</option>
+          <option value="HTTPServer">HTTPServer</option>
+          <option value="RDBMSへの接続">RDBMSへの接続</option>
+          <option value="UnitTest">UnitTest</option>
+          <option value="フロントとバックの接続">フロントとバックの接続</option>
+          <option value="CI">CI</option>
+          <option value="CD">CD</option>
+          <option value="認証">認証</option>
         </select>
         </form>
         <label>
