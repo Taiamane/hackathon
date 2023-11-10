@@ -4,10 +4,22 @@ import React,{ useState } from 'react';
 import { fireAuth } from "./firebase";
 import { useNavigate } from "react-router-dom"; // useHistoryをインポート
 import { signOut } from "firebase/auth";
+import { Link } from 'react-router-dom';
+
 
 import './Homepage.css';
 
 import DirectInputForm from './Addition';
+
+interface ApiItem {
+  category?: string;
+  curriculum?: string;
+  title?: string;
+  link?: string;
+  summary?: string;
+  made_day?: string;
+  updated_day?: string;
+}
 
 const Homepage: React.FC = () => {
   const navigate = useNavigate(); // useHistoryを初期化
@@ -39,6 +51,7 @@ export default Homepage;
 
 const Userinfo: React.FC = () => {
   const user = fireAuth.currentUser;
+  
 
   return (
     <div>
@@ -52,6 +65,12 @@ const Userinfo: React.FC = () => {
 };
 
 export const SearchForm: React.FC = () =>{
+  
+  const [tableData, setTableData] = useState<ApiItem[]>([]);
+  const [sortKey, setSortKey] = useState<'made_day' | 'updated_day'>('made_day');
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortKey(event.target.value as 'made_day' | 'updated_day');
+  };
 
   const Addition: React.FC = () => {
     // フォームの表示状態を管理するための状態
@@ -100,8 +119,11 @@ export const SearchForm: React.FC = () =>{
     const category = selectedGenre;
     const curriculum = selectedcurriculum;
     const backendUrl = 'https://example.com/api/some-endpoint'; // このURLを実際のバックエンドエンドポイントに置き換え
+    
 
     // GETリクエストを送信. ここの内容は修正が入りそう
+    //内容を手に入れた後、それを表形式で表示する。詳細に移動するボタンと、移動した先で消去と編集も実装する
+    //あとソート機能もね
     fetch(backendUrl,{
       method:"GET",
       headers:{
@@ -110,7 +132,11 @@ export const SearchForm: React.FC = () =>{
     })
       .then((response) => response.json())
       .then((data) => {
-        setResponse(data.message); // レスポンスメッセージを表示
+        const sortedData = data.sort((a: ApiItem, b: ApiItem) =>
+        (a[sortKey] ?? '').localeCompare(b[sortKey] ?? '')
+        );
+
+        setTableData(sortedData); // レスポンスメッセージを表示
       })
       .catch((error) => {
         console.error('リクエストエラー:', error);
@@ -152,7 +178,30 @@ export const SearchForm: React.FC = () =>{
           <option value="item17">認証</option>
         </select>
         </form>
+        <label>
+        ソートキー：
+        <select value={sortKey} onChange={handleSortChange}>
+          <option value="made_day">ID（作成日時）</option>
+          <option value="updated_day">Updated Day</option>
+        </select>
+      </label>
       <button onClick={sendResearch}>検索</button>
+      <ul>
+  {tableData.map((item) => (
+    <li key={item.made_day}>
+      <p>Category: {item.category}</p>
+      <p>Curriculum: {item.curriculum}</p>
+      <p>Title: {item.title}</p>
+      <p>Link: {item.link}</p>
+      <p>Summary: {item.summary}</p>
+      <p>Made Day: {item.made_day}</p>
+      <p>Updated Day: {item.updated_day}</p>
+      <Link to={`/detail/id=${item.made_day}`}>
+        <button>詳細ページへ</button>
+      </Link>
+    </li>
+  ))}
+</ul>
       <Addition/>
     </div>
   );
