@@ -118,7 +118,7 @@ export const SearchForm: React.FC = () =>{
     //以下、検索をかけた時の処理
     const category = selectedGenre;
     const curriculum = selectedcurriculum;
-    const backendUrl = 'http://localhost:8080/user'; // このURLを実際のバックエンドエンドポイントに置き換え
+    const backendUrl = 'http://localhost:8080/'; // このURLを実際のバックエンドエンドポイントに置き換え
     
     fetch(backendUrl,{
       method:"GET",

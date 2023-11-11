@@ -14,15 +14,16 @@ const DirectInputForm: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [link, setLink] = useState<string>("");
   const [summary,setSummary] = useState<string>("");
-  const [made_day, setMade_day] = useState<Date>();
+  const [made_day, setMade_day] = useState<string>();
   const [updated_day, setUpdated_day] = useState<string>("");
   const [formData, setFormData] = useState<FormData[]>([]);
 
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-
-    setMade_day(new Date)
+    var currentDay = new Date();
+    var dateString = currentDay.toString();
+    setMade_day(dateString)
     // フォームの内容を使用して必要なアクションを実行
     // バックエンドにリクエストを送信
   try {
@@ -44,7 +45,7 @@ const DirectInputForm: React.FC = () => {
     }
   );
 
-    if (response.ok) {
+    if (response.status === 200) {
       fetchUsers();
       console.log('POSTリクエストが成功しました');
     } else {
@@ -61,7 +62,7 @@ const DirectInputForm: React.FC = () => {
   };
   const fetchUsers = async()=>{
     try{
-      const getResponse = await fetch("",{
+      const getResponse = await fetch("http://localhost:8080",{
         method: "GET",
         headers:{
           "Content-Type":"application/json",
@@ -95,7 +96,8 @@ const DirectInputForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form> 
+{/* onSubmit={handleSubmit}> */}
       <div>
         <label>カテゴリ:</label>
         <select
