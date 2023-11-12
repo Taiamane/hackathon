@@ -40,20 +40,6 @@ const DetailPage: React.FC = () => {
     fetchData();
   }, [id]);
 
-  const handleDelete = async () => {
-    // 削除処理を実行するためのAPIエンドポイントを適切なものに置き換える
-    try {
-      await fetch(`http://localhost:8080/user/${id}`, {
-        method: 'DELETE',
-      });
-
-      // 削除成功後、トップページにリダイレクト
-      navigate('/');
-    } catch (error) {
-      console.error('削除に失敗しました:', error);
-    }
-  };
-
   const handleEdit = async () => {
     // 編集処理を実行するためのAPIエンドポイントを適切なものに置き換える
     try {
@@ -90,9 +76,6 @@ const DetailPage: React.FC = () => {
       <p>Summary: {item.summary}</p>
       <p>Made Day: {item.made_day}</p>
       <p>Updated Day: {item.updated_day}</p>
-      
-      {/* 削除ボタン */}
-      <button onClick={handleDelete}>削除</button>
       
       {/* 編集ボタン */}
       <button onClick={handleEdit}>編集</button>
