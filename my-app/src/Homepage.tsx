@@ -21,6 +21,48 @@ interface ApiItem {
   updated_day?: string;
 }
 
+interface EditFormProps {
+  item: ApiItem;
+  onSave: (updatedItem: ApiItem) => void;
+  onCancel: () => void;
+}
+
+const EditForm: React.FC<EditFormProps> = ({ item, onSave, onCancel }) => {
+  const [editedItem, setEditedItem] = useState<ApiItem>(item);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setEditedItem({ ...editedItem, [event.target.name]: event.target.value });
+  };
+
+  const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedItem({ ...editedItem, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    // 現在の日時を取得して updated_day に設定
+    const now = new Date();
+    const updatedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD 形式に変換
+    onSave({ ...editedItem, updated_day: updatedDate });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="title" value={editedItem.title || ''} onChange={handleInputChange} placeholder="タイトル" />
+      <input type="text" name="category" value={editedItem.category || ''} onChange={handleInputChange} placeholder="カテゴリ" />
+      <input type="text" name="curriculum" value={editedItem.curriculum || ''} onChange={handleInputChange} placeholder="カリキュラム" />
+      <input type="text" name="link" value={editedItem.link || ''} onChange={handleInputChange} placeholder="リンク" />
+      <textarea name="summary" value={editedItem.summary || ''} onChange={handleTextareaChange} placeholder="要約"></textarea>
+      <input type="text" name="updated_day" value={editedItem.updated_day || ''} onChange={handleInputChange} placeholder="更新日" />
+
+      <button type="submit">保存</button>
+      <button type="button" onClick={onCancel}>キャンセル</button>
+    </form>
+  );
+};
+
+
+
 const Homepage: React.FC = () => {
   const navigate = useNavigate(); // useHistoryを初期化
 
@@ -67,19 +109,56 @@ const Userinfo: React.FC = () => {
 export const SearchForm: React.FC = () =>{
   const navigate = useNavigate(); // useHistoryを初期化
   const [deleteInput, setDeleteInput] = useState('');
+  const [visibleSummaryId, setVisibleSummaryId] = useState<string | null>(null);
+
+  const [editingItem, setEditingItem] = useState<ApiItem | null>(null);
+  const handleEditClick = (item: ApiItem) => {
+    setEditingItem(item);
+  };
+
   const handleDeleteInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDeleteInput(event.target.value);
   };
+  const handleSave = (updatedItem: ApiItem) => {
+    const backendUrl = `http://localhost:8080/items/${updatedItem.made_day}`; // 編集するアイテムのIDに基づくURL
+  
+    fetch(backendUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedItem)
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(() => {
+      // 成功した場合、状態を更新してリストを再レンダリング
+      const updatedData = tableData.map((item) => 
+        item.made_day === updatedItem.made_day ? updatedItem : item
+      );
+      setTableData(updatedData);
+      setEditingItem(null);
+    })
+    .catch((error) => {
+      console.error("編集リクエストエラー:", error);
+    });
+  };
+  
 
   const handleDelete = () => {
     // 入力されたアイテム名に一致するアイテムを削除するためにバックエンドにDELETEリクエストを送信
-    const backendUrl = `http://localhost:8080/`; // バックエンドの削除エンドポイントが/delete/:item_nameであると仮定
+    const backendUrl = `http://localhost:8080/items/${deleteInput}`; // バックエンドの削除エンドポイントが/delete/:item_nameであると仮定
 
     fetch(backendUrl, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
+      
     })
       .then((response) => {
         if (!response.ok) {
@@ -225,6 +304,8 @@ export const SearchForm: React.FC = () =>{
       <button onClick={sendResearch}>検索</button>
       <ul>
   {tableData.map((item) => {
+
+    
     if (selectedcurriculum !== item.curriculum) {
       return <></>
     }
@@ -237,14 +318,13 @@ export const SearchForm: React.FC = () =>{
       <p>Curriculum: {item.curriculum}</p>
       <p>Title: {item.title}</p>
       <p>Link: {item.link}</p>
-      <p>Summary: {item.summary}</p>
       <p>Made Day: {item.made_day}</p>
       <p>Updated Day: {item.updated_day}</p>
-      {/* <Link to={`detail/${item.made_day}`}> */}
-      {/* <Link to={`localhost:3000/detail?id=${item.made_day}`}> */}
-        {/* <button>詳細ページへ</button> */}
-      {/* </Link> */}
-       <button onClick={()=>navigate(`/detail/${item.made_day}`)}>詳細ページへ</button> 
+      <button onClick={() => item.made_day && setVisibleSummaryId(item.made_day)}>詳細</button>
+        {visibleSummaryId === item.made_day && <p>Summary: {item.summary}</p>}
+
+        <button onClick={() => setEditingItem(item)}>編集</button>
+        {editingItem && (<EditForm item={editingItem} onSave={handleSave} onCancel={() => setEditingItem(null)} />)}
       
     </li>)
 })}
@@ -253,5 +333,3 @@ export const SearchForm: React.FC = () =>{
     </div>
   );
 };
-
-
