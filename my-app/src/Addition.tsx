@@ -1,3 +1,4 @@
+import { ok } from 'assert';
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 
 interface FormData {
@@ -23,30 +24,34 @@ const DirectInputForm: React.FC = () => {
     event.preventDefault();
     var currentDay = new Date();
     var dateString = currentDay.toString();
+    console.log(dateString)
     setMade_day(dateString)
     // フォームの内容を使用して必要なアクションを実行
     // バックエンドにリクエストを送信
   try {
-    const response = await fetch('http://localhost:8080', {
+    const response = await fetch('http://localhost:8080/items', {
       method: 'POST', // POSTリクエストを送信（HTTPメソッドを適切に設定）
       headers: {
         'Content-Type': 'application/json', // リクエストヘッダーを適切に設定
       },
       body: JSON.stringify({
-        category,
-        curriculum,
-        title,
-        link,
-        summary,
-        made_day
+        category:category,
+        curriculum:curriculum,
+        title:title,
+        link:link,
+        summary:summary,
+        made_day:dateString,
+        updated_day:""
         
 
     }), // フォームデータをJSON文字列に変換
     }
   );
 
-    if (response.status === 200) {
-      fetchUsers();
+  console.log(response)
+
+    if (response.ok) {
+      
       console.log('POSTリクエストが成功しました');
     } else {
       console.error('POSTリクエストが失敗しました');
@@ -60,16 +65,18 @@ const DirectInputForm: React.FC = () => {
 
     
   };
+
   const fetchUsers = async()=>{
+    
     try{
-      const getResponse = await fetch("http://localhost:8080",{
+      const getResponse = await fetch("http://localhost:8080/items",{
         method: "GET",
         headers:{
           "Content-Type":"application/json",
         },
-      });
+      }); 
 
-      if (getResponse.status === 200) {
+      if (getResponse.ok) {
         // GETリクエストの結果を処理
         const formdata = await getResponse.json();
         setFormData(formdata);
@@ -82,10 +89,13 @@ const DirectInputForm: React.FC = () => {
       console.error(err)
     }
   };
+  
 
-  useEffect(() => {
-    fetchUsers();
-  },[]);
+  // useEffect(() => {
+  //   fetchUsers();
+  // },[]);
+
+  //↑ここをコメントアウトするとエラーが一部消えた
 
   const handlechangecurriculum = (e:any) => {
     setCurriculum(e.label);
@@ -96,14 +106,13 @@ const DirectInputForm: React.FC = () => {
   };
 
   return (
-    <form> 
-{/* onSubmit={handleSubmit}> */}
+    <form onSubmit={handleSubmit}> 
       <div>
         <label>カテゴリ:</label>
         <select
           name="category"
           value={category}
-          onChange={handlechangecategory}
+          onChange={(e) =>setCategory(e.target.value)}
         >
           <option value="">選択してください</option>
           <option value="技術ブログ">技術ブログ</option>
@@ -116,7 +125,7 @@ const DirectInputForm: React.FC = () => {
         <select
           name="curriculum"
           value={curriculum}
-          onChange={handlechangecurriculum}
+          onChange={(e)=>setCurriculum(e.target.value)}
         >
           <option value="">選択してください</option>
           <option value="OSコマンドとシェル">OSコマンドとシェル</option>

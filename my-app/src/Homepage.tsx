@@ -92,8 +92,8 @@ export const SearchForm: React.FC = () =>{
         {isFormOpen && (
           <div>
             {/* ここに追加用のフォームのコンポーネントを配置 */}
-            <form>
-              <DirectInputForm/>
+            <DirectInputForm/>
+            <form>            
               <button onClick={closeForm}>閉じる</button>
             </form>
           </div>
