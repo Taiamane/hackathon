@@ -151,7 +151,7 @@ export const SearchForm: React.FC = () =>{
 
   const handleDelete = () => {
     // 入力されたアイテム名に一致するアイテムを削除するためにバックエンドにDELETEリクエストを送信
-    const backendUrl = `http://localhost:8080/items/${deleteInput}`; // バックエンドの削除エンドポイントが/delete/:item_nameであると仮定
+    const backendUrl = `http://localhost:8080/items/${deleteInput}`; 
 
     fetch(backendUrl, {
       method: "DELETE",
