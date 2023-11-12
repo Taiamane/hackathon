@@ -130,7 +130,20 @@ const DirectInputForm: React.FC = () => {
           <option value="OSコマンドとシェル">OSコマンドとシェル</option>
           <option value="Git">Git</option>
           <option value="GitHub">GitHub</option>
-          {/* 他のカリキュラムの選択肢を追加 */}
+          <option value="HTML&CSS">HTML&CSS</option>
+          <option value="Javascript">Javascript</option>
+          <option value="React">React</option>
+          <option value="Typescript">Typescript</option>
+          <option value="SQL">SQL</option>
+          <option value="docker">Docker</option>
+          <option value="Go">Go</option>
+          <option value="HTTPServer">HTTPServer</option>
+          <option value="RDBMSへの接続">RDBMSへの接続</option>
+          <option value="UnitTest">UnitTest</option>
+          <option value="フロントとバックの接続">フロントとバックの接続</option>
+          <option value="CI">CI</option>
+          <option value="CD">CD</option>
+          <option value="認証">認証</option>
         </select>
       </div>
       <div>
