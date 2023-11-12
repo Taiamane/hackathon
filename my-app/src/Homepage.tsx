@@ -2,7 +2,7 @@
 
 import React,{ useState } from 'react';
 import { fireAuth } from "./firebase";
-import { useNavigate } from "react-router-dom"; // useHistoryをインポート
+import { Navigate, useNavigate } from "react-router-dom"; // useHistoryをインポート
 import { signOut } from "firebase/auth";
 import { Link } from 'react-router-dom';
 
@@ -65,6 +65,7 @@ const Userinfo: React.FC = () => {
 };
 
 export const SearchForm: React.FC = () =>{
+  const navigate = useNavigate(); // useHistoryを初期化
   
   const [tableData, setTableData] = useState<ApiItem[]>([]);
   const [sortKey, setSortKey] = useState<'made_day' | 'updated_day'>('made_day');
@@ -115,6 +116,7 @@ export const SearchForm: React.FC = () =>{
   const [response,setResponse] = useState('');
 
   const sendResearch = () => {
+    
     //以下、検索をかけた時の処理
     const category = selectedGenre;
     const curriculum = selectedcurriculum;
@@ -146,9 +148,9 @@ export const SearchForm: React.FC = () =>{
       <form name="form1">
         <select name="genres" id="" value={selectedGenre} onChange={handleGenreChange}>
           <option value=""></option>
-          <option value="blogs">技術ブログ</option>
-          <option value="books">技術書</option>
-          <option value="movies">技術系動画</option>
+          <option value="技術ブログ">技術ブログ</option>
+          <option value="技術書">技術書</option>
+          <option value="技術系動画">技術系動画</option>
         </select>
       </form>
       <p>カリキュラム選択</p>
@@ -183,7 +185,14 @@ export const SearchForm: React.FC = () =>{
       </label>
       <button onClick={sendResearch}>検索</button>
       <ul>
-  {tableData.map((item) => (
+  {tableData.map((item) => {
+    if (selectedcurriculum !== item.curriculum) {
+      return <></>
+    }
+    if (selectedGenre !== item.category){
+      return<></>
+    }
+    return(
     <li key={item.made_day}>
       <p>Category: {item.category}</p>
       <p>Curriculum: {item.curriculum}</p>
@@ -192,11 +201,14 @@ export const SearchForm: React.FC = () =>{
       <p>Summary: {item.summary}</p>
       <p>Made Day: {item.made_day}</p>
       <p>Updated Day: {item.updated_day}</p>
-      <Link to={`/detail/id=${item.made_day}`}>
-        <button>詳細ページへ</button>
-      </Link>
-    </li>
-  ))}
+      {/* <Link to={`detail/${item.made_day}`}> */}
+      {/* <Link to={`localhost:3000/detail?id=${item.made_day}`}> */}
+        {/* <button>詳細ページへ</button> */}
+      {/* </Link> */}
+       <button onClick={()=>navigate(`/detail/${item.made_day}`)}>詳細ページへ</button> 
+      
+    </li>)
+})}
 </ul>
       <Addition/>
     </div>

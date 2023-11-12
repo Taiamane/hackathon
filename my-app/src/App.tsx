@@ -12,6 +12,7 @@ import './App.css';
 
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Homepage from './Homepage';
+import DetailPage from "./detail";
 
 
 const App = () => {
@@ -20,15 +21,16 @@ const App = () => {
   const [loginUser, setLoginUser] = useState(fireAuth.currentUser);
   
   // ログイン状態を監視して、stateをリアルタイムで更新する
-  onAuthStateChanged(fireAuth, user => {
-    setLoginUser(user);
-  });
+  
 
   useEffect(() => {
+    onAuthStateChanged(fireAuth, user => {
+      setLoginUser(user);
+    });
     if(loginUser){
       navigate('/Homepage');
     }
-  },[loginUser,navigate]);
+  },[loginUser]);
   
 
   
@@ -37,6 +39,7 @@ const App = () => {
     <div>
       <Routes>
         <Route path="/Homepage" element= {<Homepage />} />
+        <Route path="/detail" element={<DetailPage />} />
         {/* 他のルート設定もここに追加できます */}
       </Routes>
     <div>

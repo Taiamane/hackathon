@@ -24,8 +24,13 @@ const DirectInputForm: React.FC = () => {
     event.preventDefault();
     var currentDay = new Date();
     var dateString = currentDay.toString();
+    var datestring_mod = dateString.slice( 0, -10 );  
+    
+    
+    
+    dateString = datestring_mod.replace(/ /g,'');
     console.log(dateString)
-    setMade_day(dateString)
+
     // フォームの内容を使用して必要なアクションを実行
     // バックエンドにリクエストを送信
   try {

@@ -21,6 +21,7 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      
       try {
         // ダミーデータを取得するためのAPIエンドポイントを適切なものに置き換える
         const response = await fetch(`http://localhost:8080/user?id=${id}`);
