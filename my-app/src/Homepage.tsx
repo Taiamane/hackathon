@@ -2,9 +2,8 @@
 
 import React,{ useState } from 'react';
 import { fireAuth } from "./firebase";
-import { Navigate, useNavigate } from "react-router-dom"; // useHistoryをインポート
+import { useNavigate } from "react-router-dom"; // useHistoryをインポート
 import { signOut } from "firebase/auth";
-import { Link } from 'react-router-dom';
 import Delete from './Delete';
 
 
@@ -60,6 +59,8 @@ const EditForm: React.FC<EditFormProps> = ({ item, onSave, onCancel }) => {
       <input type="text" name="link" value={editedItem.link || ''} onChange={handleInputChange} placeholder="リンク" />
       <textarea name="summary" value={editedItem.summary || ''} onChange={handleTextareaChange} placeholder="要約"></textarea>
       <input type="text" name="updated_day" value={editedItem.updated_day || ''} onChange={handleInputChange} placeholder="更新日" />
+      <input type="text" name="made_day" value={editedItem.made_day || ''} onChange={handleInputChange} placeholder="作成日" />
+      <span>←変更しないでください</span>
 
       <button type="submit">保存</button>
       <button type="button" onClick={onCancel}>キャンセル</button>
@@ -120,15 +121,9 @@ export const SearchForm: React.FC = () =>{
   };
 
   const navigate = useNavigate(); // useHistoryを初期化
-  const [deleteInput, setDeleteInput] = useState('');
   const [visibleSummaryId, setVisibleSummaryId] = useState<string | null>(null);
 
   const [editingItem, setEditingItem] = useState<ApiItem | null>(null);
-  
-
-  const handleDeleteInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDeleteInput(event.target.value);
-  };
   const handleSave = (updatedItem: ApiItem) => {
     const backendUrl = `http://localhost:8080/items/${updatedItem.made_day}`; // 編集するアイテムのIDに基づくURL
   
@@ -157,10 +152,6 @@ export const SearchForm: React.FC = () =>{
       console.error("編集リクエストエラー:", error);
     });
   };
-  
-
- 
-
   
   const [tableData, setTableData] = useState<ApiItem[]>([]);
   const [sortKey, setSortKey] = useState<'made_day' | 'updated_day'>('made_day');
@@ -321,9 +312,6 @@ export const SearchForm: React.FC = () =>{
     return null;
   })}
 </ul>
-
-
-
       <Addition/>
     </div>
   );
