@@ -112,14 +112,17 @@ const Userinfo: React.FC = () => {
 };
 
 export const SearchForm: React.FC = () =>{
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
+  const handleEditClick = (itemId: string) => {
+    setEditingItemId(itemId);
+  };
+
   const navigate = useNavigate(); // useHistoryを初期化
   const [deleteInput, setDeleteInput] = useState('');
   const [visibleSummaryId, setVisibleSummaryId] = useState<string | null>(null);
 
   const [editingItem, setEditingItem] = useState<ApiItem | null>(null);
-  const handleEditClick = (item: ApiItem) => {
-    setEditingItem(item);
-  };
+  
 
   const handleDeleteInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDeleteInput(event.target.value);
@@ -260,6 +263,24 @@ export const SearchForm: React.FC = () =>{
         setResponse('リクエストエラーが発生しました。');
       });
   };
+  function renderListItem(item:ApiItem) {
+    return (
+      <li key={item.made_day}>
+        <p>Category: {item.category}</p>
+        <p>Curriculum: {item.curriculum}</p>
+        <p>Title: {item.title}</p>
+        <p>Link: {item.link}</p>
+        <p>Made Day: {item.made_day}</p>
+        <p>Updated Day: {item.updated_day}</p>
+        <button onClick={() => item.made_day && setVisibleSummaryId(item.made_day)}>詳細</button>
+        {visibleSummaryId === item.made_day && <p>Summary: {item.summary}</p>}
+        <button onClick={() => setEditingItemId(item.made_day || null)}>編集</button>
+        {editingItemId === item.made_day && (
+          <EditForm item={item} onSave={handleSave} onCancel={() => setEditingItemId(null)} />
+        )}
+      </li>
+    );
+  }
 
   return(
     <div>
@@ -309,31 +330,31 @@ export const SearchForm: React.FC = () =>{
       <button onClick={sendResearch}>検索</button>
       <ul>
   {tableData.map((item) => {
-
-    
-    if (selectedcurriculum !== item.curriculum) {
-      return <></>
+    // 両方の条件が指定されている場合、両方に一致するアイテムを表示
+    if (selectedcurriculum && selectedGenre) {
+      if (item.curriculum === selectedcurriculum && item.category === selectedGenre) {
+        return renderListItem(item);
+      }
     }
-    if (selectedGenre !== item.category){
-      return<></>
+    // 一方のみが指定されている場合、その条件に一致するアイテムを表示
+    else if (selectedcurriculum || selectedGenre) {
+      if (selectedcurriculum && item.curriculum === selectedcurriculum) {
+        return renderListItem(item);
+      }
+      if (selectedGenre && item.category === selectedGenre) {
+        return renderListItem(item);
+      }
     }
-    return(
-    <li key={item.made_day}>
-      <p>Category: {item.category}</p>
-      <p>Curriculum: {item.curriculum}</p>
-      <p>Title: {item.title}</p>
-      <p>Link: {item.link}</p>
-      <p>Made Day: {item.made_day}</p>
-      <p>Updated Day: {item.updated_day}</p>
-      <button onClick={() => item.made_day && setVisibleSummaryId(item.made_day)}>詳細</button>
-        {visibleSummaryId === item.made_day && <p>Summary: {item.summary}</p>}
-
-        <button onClick={() => setEditingItem(item)}>編集</button>
-        {editingItem && (<EditForm item={editingItem} onSave={handleSave} onCancel={() => setEditingItem(null)} />)}
-      
-    </li>)
-})}
+    // どちらの条件も指定されていない場合、全てのアイテムを表示
+    else {
+      return renderListItem(item);
+    }
+    return null;
+  })}
 </ul>
+
+
+
       <Addition/>
     </div>
   );
