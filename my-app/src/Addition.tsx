@@ -1,4 +1,3 @@
-import { ok } from 'assert';
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 
 interface FormData {
@@ -15,8 +14,6 @@ const DirectInputForm: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [link, setLink] = useState<string>("");
   const [summary,setSummary] = useState<string>("");
-  const [made_day, setMade_day] = useState<string>();
-  const [updated_day, setUpdated_day] = useState<string>("");
   const [formData, setFormData] = useState<FormData[]>([]);
 
 
@@ -61,10 +58,7 @@ const DirectInputForm: React.FC = () => {
   } catch (error) {
     // リクエストエラーの処理
     console.error('リクエストエラー:', error);
-  }
-
-    
-  };
+  } };
 
   const fetchUsers = async()=>{
     
@@ -91,11 +85,6 @@ const DirectInputForm: React.FC = () => {
   };
   
 
-  // useEffect(() => {
-  //   fetchUsers();
-  // },[]);
-
-  //↑ここをコメントアウトするとエラーが一部消えた
 
   const handlechangecurriculum = (e:any) => {
     setCurriculum(e.label);

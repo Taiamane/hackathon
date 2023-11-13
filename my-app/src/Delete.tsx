@@ -3,17 +3,10 @@ import { useState } from "react";
 
 
 function Delete(){
-
     const [title,setTitle] = useState("");
-
-
-
-
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-
         try{
-
             const response = await fetch(
                 "http://localhost:8080/",
                 {
@@ -26,18 +19,7 @@ function Delete(){
                     }),
                 }
             );
-            if (response.ok) {
-                console.log("DELETE succeeded")
-                alert("削除しました")
-            } else {
-                console.error("POST request failed")
-            }
-
             setTitle("");
-            //setCategory("1");
-            //setCurriculum("1");
-
-
         } catch (err) {
             console.error(err)
         }
@@ -59,8 +41,7 @@ function Delete(){
                     onChange={(e) => setTitle(e.target.value)}
                 ></input></label>
             </div>
-
-            <button type={"submit"}>削除する</button>
+            <button type={"submit"}>削除</button>
         </form>
 
     )
