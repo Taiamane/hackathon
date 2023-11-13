@@ -5,6 +5,7 @@ import { fireAuth } from "./firebase";
 import { Navigate, useNavigate } from "react-router-dom"; // useHistoryをインポート
 import { signOut } from "firebase/auth";
 import { Link } from 'react-router-dom';
+import Delete from './Delete';
 
 
 import './Homepage.css';
@@ -88,6 +89,7 @@ const Homepage: React.FC = () => {
       <Userinfo/>
 
       <h2>Homepage</h2>
+      <Delete/>
       <SearchForm/>
       
     </div>
@@ -157,36 +159,7 @@ export const SearchForm: React.FC = () =>{
   };
   
 
-  const handleDelete = () => {
-    // 入力されたアイテム名に一致するアイテムを削除するためにバックエンドにDELETEリクエストを送信
-    const backendUrl = `http://localhost:8080/items/${deleteInput}`; 
-
-    fetch(backendUrl, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.text(); // レスポンスのテキストを取得
-      })
-      .then((data) => {
-        // 成功した場合のレスポンスを処理（必要な場合）
-        console.log("アイテムが正常に削除されました", data);
-    
-        // 削除されたアイテムをフィルタリングしてテーブルデータを更新
-        const updatedData = tableData.filter((item) => item.title !== deleteInput);
-        setTableData(updatedData);
-      })
-      .catch((error) => {
-        console.error("削除リクエストエラー:", error);
-      });
-    
-  };
+ 
 
   
   const [tableData, setTableData] = useState<ApiItem[]>([]);
@@ -284,10 +257,6 @@ export const SearchForm: React.FC = () =>{
 
   return(
     <div>
-      <p>アイテム名を入力してください：</p>
-      <input type="text" value={deleteInput} onChange={handleDeleteInputChange} />
-      <button onClick={handleDelete}>アイテムを削除</button>
-
       <p>カテゴリ選択</p>
       <form name="form1">
         <select name="genres" id="" value={selectedGenre} onChange={handleGenreChange}>
