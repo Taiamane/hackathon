@@ -23,7 +23,8 @@ const DirectInputForm: React.FC = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     var currentDay = new Date();
-    const dateString = currentDay.toISOString().split('T')[0]; 
+    const dateString = currentDay.toISOString(); 
+    const updatedDate = dateString.substring(0, 19);
 
     // フォームの内容を使用して必要なアクションを実行
     // バックエンドにリクエストを送信
@@ -39,7 +40,7 @@ const DirectInputForm: React.FC = () => {
         title:title,
         link:link,
         summary:summary,
-        made_day:dateString,
+        made_day:updatedDate,
         updated_day:""
         
 

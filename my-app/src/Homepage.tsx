@@ -40,11 +40,16 @@ const EditForm: React.FC<EditFormProps> = ({ item, onSave, onCancel }) => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // 現在の日時を取得して updated_day に設定
+    // 現在の日時を取得して updated_day に設定（時間まで含む）
     const now = new Date();
-    const updatedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD 形式に変換
+    const updatedDateTime = now.toISOString(); // "YYYY-MM-DDTHH:mm:ss.sssZ" 形式
+  
+    // 秒までの情報を含む部分を抽出
+    const updatedDate = updatedDateTime.substring(0, 19); // "YYYY-MM-DDTHH:mm:ss" 形式に変換
+  
     onSave({ ...editedItem, updated_day: updatedDate });
   };
+  
 
   return (
     <form onSubmit={handleSubmit}>
@@ -133,7 +138,7 @@ export const SearchForm: React.FC = () =>{
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      return response.json();
+      return response.status === 204 ? Promise.resolve({}) : response.json();
     })
     .then(() => {
       // 成功した場合、状態を更新してリストを再レンダリング
