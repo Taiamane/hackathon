@@ -125,7 +125,7 @@ export const SearchForm: React.FC = () =>{
 
   const [editingItem, setEditingItem] = useState<ApiItem | null>(null);
   const handleSave = (updatedItem: ApiItem) => {
-    const backendUrl = `http://localhost:8080/items/${updatedItem.made_day}`; // 編集するアイテムのIDに基づくURL
+    const backendUrl = `https://hackathon-back-zmir5vzwua-uc.a.run.app/items/${updatedItem.made_day}`; // 編集するアイテムのIDに基づくURL
   
     fetch(backendUrl, {
       method: "PUT",
@@ -206,7 +206,7 @@ export const SearchForm: React.FC = () =>{
     //以下、検索をかけた時の処理
     const category = selectedGenre;
     const curriculum = selectedcurriculum;
-    const backendUrl = 'http://localhost:8080/'; // このURLを実際のバックエンドエンドポイントに置き換え
+    const backendUrl = 'https://hackathon-back-zmir5vzwua-uc.a.run.app/'; // このURLを実際のバックエンドエンドポイントに置き換え
     
     fetch(backendUrl,{
       method:"GET",
