@@ -8,7 +8,7 @@ function Delete(){
         e.preventDefault()
         try{
             const response = await fetch(
-                "http://localhost:8080/",
+                "https://hackathon-back-zmir5vzwua-uc.a.run.app/",
                 {
                     method: "DELETE",
                     headers: {
@@ -30,7 +30,7 @@ function Delete(){
         <form
             style={{display: "flex", flexDirection: "column"}}
             onSubmit={handleSubmit}
-            action="http://localhost:8080/"
+            action="https://hackathon-back-zmir5vzwua-uc.a.run.app/"
             method="DELETE"
         >
 

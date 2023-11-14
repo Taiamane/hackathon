@@ -26,7 +26,7 @@ const DirectInputForm: React.FC = () => {
     // フォームの内容を使用して必要なアクションを実行
     // バックエンドにリクエストを送信
   try {
-    const response = await fetch('http://localhost:8080/items', {
+    const response = await fetch('https://hackathon-back-zmir5vzwua-uc.a.run.app/items', {
       method: 'POST', // POSTリクエストを送信（HTTPメソッドを適切に設定）
       headers: {
         'Content-Type': 'application/json', // リクエストヘッダーを適切に設定
@@ -63,7 +63,7 @@ const DirectInputForm: React.FC = () => {
   const fetchUsers = async()=>{
     
     try{
-      const getResponse = await fetch("http://localhost:8080/items",{
+      const getResponse = await fetch("https://hackathon-back-zmir5vzwua-uc.a.run.app/items",{
         method: "GET",
         headers:{
           "Content-Type":"application/json",
