@@ -8,7 +8,8 @@ function Delete(){
         e.preventDefault()
         try{
             const response = await fetch(
-                "https://hackathon-back-zmir5vzwua-uc.a.run.app/",
+                "https://hackathon-back-zmir5vzwua-uc.a.run.app",
+                //"https://hackathon-back-zmir5vzwua-uc.a.run.app/",
                 {
                     method: "DELETE",
                     headers: {
@@ -30,7 +31,8 @@ function Delete(){
         <form
             style={{display: "flex", flexDirection: "column"}}
             onSubmit={handleSubmit}
-            action="https://hackathon-back-zmir5vzwua-uc.a.run.app/"
+            action="https://hackathon-back-zmir5vzwua-uc.a.run.app"
+            //action="https://hackathon-back-zmir5vzwua-uc.a.run.app/"
             method="DELETE"
         >
 
