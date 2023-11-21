@@ -26,7 +26,7 @@ const DirectInputForm: React.FC = () => {
     // フォームの内容を使用して必要なアクションを実行
     // バックエンドにリクエストを送信
   try { 
-    const response = await fetch('https://hackathon-back-zmir5vzwua-uc.a.run.app/items',
+    const response = await fetch('https://hackathon-back-zmir5vzwua-uc.a.run.app/',
      {
       method: 'POST', // POSTリクエストを送信（HTTPメソッドを適切に設定）
       headers: {
