@@ -65,6 +65,7 @@ const DirectInputForm: React.FC = () => {
     
     try{ 
       const getResponse = await fetch("https://hackathon-back-zmir5vzwua-uc.a.run.app/items",{
+        mode:"no-cors",
         method: "GET",
         headers:{
           "Content-Type":"application/json",
